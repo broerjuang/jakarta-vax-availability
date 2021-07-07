@@ -29,7 +29,7 @@ import {
   Wrap,
   WrapItem
 } from '@chakra-ui/react';
-import { DetailLokasi, VaccinationData } from 'data/types';
+import { DetailLokasi, Kuota, VaccinationData } from 'data/types';
 import { formatDistanceToNow } from 'date-fns';
 import idLocale from 'date-fns/locale/id';
 
@@ -64,9 +64,12 @@ export default function VaxLocation({ loading, location, isUserLocationExist }: 
   const { colorMode } = useColorMode();
   const hasQuotaBorderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
 
-  const mapsUrl = detail_lokasi?.[0]
-    ? `https://www.google.com/maps/search/${encodeURIComponent(`${detail_lokasi[0].lat}, ${detail_lokasi[0].lon}`)}`
-    : `https://www.google.com/maps/search/${encodeURIComponent(namaLokasi)}`;
+  const mapsUrl =
+    detail_lokasi?.[0] == null
+      ? `https://www.google.com/maps/search/${encodeURIComponent(namaLokasi)}`
+      : `https://www.google.com/maps/search/${encodeURIComponent(
+          `${detail_lokasi[0]?.lat}, ${detail_lokasi[0]?.lon}`
+        )}`;
   const isCurrentLocationHasQuota = hasQuota(jadwal ?? []);
 
   const renderLocationDetail = () => {
@@ -125,8 +128,8 @@ export default function VaxLocation({ loading, location, isUserLocationExist }: 
                       </Thead>
                       <Tbody>
                         {waktu?.map(({ label, id, kuota }) => {
-                          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                          const { sisaKuota = 0, jakiKuota = 0, totalKuota = 0 } = kuota || {};
+                          const { sisaKuota = 0, jakiKuota = 0, totalKuota = 0 } = kuota as Kuota;
+
                           return (
                             <Tr key={id}>
                               <Td>{label}</Td>
