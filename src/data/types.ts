@@ -55,6 +55,8 @@ export const VacctinationRt = rt.Record({
   last_updated_at: rt.String
 });
 
+export const VaccinationDataRt = rt.Array(VacctinationRt);
+
 export type VaccinationData = rt.Static<typeof VacctinationRt>;
 
 export type Jadwal = rt.Static<typeof JadwalRt>;
